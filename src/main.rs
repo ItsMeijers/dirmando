@@ -3,6 +3,8 @@ extern crate clap;
 use clap::{Arg, App};
 
 fn main() {
+    // Add the possibility to add a chain of commands
+    // Add the possibility to choose a chain of commands
     let matches = App::new("dirmando")
         .version("0.1.0")
         .author("Thomas Meijers <thomasmeijers@live.nl>")
@@ -37,7 +39,19 @@ fn main() {
             .conflicts_with_all(&vec!["save", "export", "choose"]))
         .get_matches();
 
-    let url = matches.value_of("URL").unwrap();
+    if matches.is_present("choose") {
+       println!("Executing choose!");
+    }
 
-    println!("{}", url);
+    if let Some(s) = matches.value_of("save") {
+       println!("Value for output: {}", s);
+    }
+
+    if let Some(e) = matches.value_of("export") {
+       println!("Value for output: {}", e);
+    }
+
+    if let Some(i) = matches.value_of("import") {
+       println!("Value for output: {}", i);
+    }
 }
