@@ -1,0 +1,7 @@
+[package]
+name = "dirmando"
+version = "0.1.0"
+authors = ["ThomasMeijers <thomasmeijers@live.nl>"]
+
+[dependencies]
+clap = "2.32.0"
