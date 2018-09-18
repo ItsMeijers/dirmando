@@ -1,0 +1,7 @@
+{
+    "database": {
+        "/home/thomas/dirmand": [
+            "ls", "cd", "pwd"
+        ]
+    }
+}

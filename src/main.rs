@@ -1,6 +1,16 @@
 extern crate clap;
 
+#[macro_use]
+extern crate serde_derive;
+
+extern crate serde;
+extern crate serde_json;
+
 use clap::{Arg, App};
+use std::collections::HashMap;
+use std::env::current_dir;
+
+pub mod dirmando;
 
 fn main() {
     // Add the possibility to add a chain of commands
@@ -39,8 +49,18 @@ fn main() {
             .conflicts_with_all(&vec!["save", "export", "choose"]))
         .get_matches();
 
+    let dm: dirmando::Dirmando = dirmando::fromFile("/home/thomas/dirmand/db.json");
+
     if matches.is_present("choose") {
-       println!("Executing choose!");
+        // todo handle failure cases on unwrap()
+        let currentDir = String::from(current_dir().unwrap().to_str().unwrap());
+
+        let commandosOpt = dm.load(&currentDir);
+        
+        match commandosOpt {
+            Some(commandos) => dm.choose(commandos),
+            None            => println!("No commandos found for directory '{}'!", currentDir)
+        }
     }
 
     if let Some(s) = matches.value_of("save") {
