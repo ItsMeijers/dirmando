@@ -4,7 +4,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use serde_json;
 use std::io::{stdin,stdout,Write};
-use std::process::Command;
+use std::process::{Command, Stdio};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Dirmando {
@@ -45,11 +45,14 @@ impl Dirmando {
         
         let c = &commandos[s.parse::<usize>().unwrap()];
 
-        let output = Command::new(c).output().expect("failed to process command");
+        let mut cmd = Command::new(c)
+                        .stdout(Stdio::inherit())
+                        .stderr(Stdio::inherit())
+                        .spawn()
+                        .unwrap();
 
-        
-        println!("stdout: {}", String::from_utf8_lossy(&output.stdout));
-        println!("{}", output.status);
+        let status = cmd.wait();
+        println!("Exited with status {:?}", status);
     }
 
     pub fn import(&self) {
